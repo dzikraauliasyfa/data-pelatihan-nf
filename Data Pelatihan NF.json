@@ -1,0 +1,159 @@
+{
+  "name": "Data Pelatihan NF",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0a1fec55-6893-4042-bc9c-356bf578eca4",
+      "name": "When chat message received",
+      "webhookId": "65877fad-819b-4a27-b56e-49ec2a71ed01"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah chatbot informasi program pelatihan.\n\nTugas kamu adalah membantu pengguna mendapatkan informasi tentang program pelatihan berdasarkan data yang tersedia di Google Sheets.\n\nGunakan Google Sheets sebagai sumber utama untuk menjawab pertanyaan mengenai:\n\n* Jenis atau program pelatihan\n* Nama pelatihan atau kursus\n* Deskripsi topik pelatihan atau kursus\n* Biaya atau harga\n\nJawablah sesuai dengan data yang tersedia di Google Sheets dan jangan mengarang informasi yang tidak ada di dalam data.\n\nJika pengguna menanyakan pelatihan yang tidak terdapat dalam Google Sheets, beri tahu bahwa data pelatihan tersebut tidak ditemukan.\n\nJawablah dengan jelas, singkat, dan mudah dipahami.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        384,
+        0
+      ],
+      "id": "70c4de4a-3412-4cea-9072-28f132dff4df",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        256,
+        208
+      ],
+      "id": "170e89c8-b1a8-4592-9d72-869f0d810280",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "lK4QpakL9yS3T0UU",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        400,
+        208
+      ],
+      "id": "2430ca1d-f7be-42e1-bbc0-808bd62b6188",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "16N-YDKLNhfF4V06m0pJ_Run8VO-LCux7EkFZZaonAvc",
+          "mode": "list",
+          "cachedResultName": "Data Pelatihan NF",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16N-YDKLNhfF4V06m0pJ_Run8VO-LCux7EkFZZaonAvc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1117926954,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16N-YDKLNhfF4V06m0pJ_Run8VO-LCux7EkFZZaonAvc/edit#gid=1117926954"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        208
+      ],
+      "id": "8e6baba5-0397-4543-90a4-2ee02c65ea70",
+      "name": "Get row(s) in sheet in Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "qoZmtrSs0Ib63J08",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "87799725-952b-46d5-a1db-041fd074e2ec",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "wDmd2HOrwCqeSZVN",
+  "tags": []
+}
